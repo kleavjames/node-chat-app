@@ -10,7 +10,7 @@ const io = socketIO(server);
 
 const port = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../public/')));
 
 io.on('connection', (socket) => {
   console.log('New user connected');
