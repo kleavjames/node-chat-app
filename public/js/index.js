@@ -1,5 +1,22 @@
 const socket = io();
 
+// autoscroll to bottom
+function scrollToBottom() {
+  // selectors
+  const messages = $('#messages');
+  const newMessage = messages.children('li:last-child');
+  // heights
+  const clientHeight = messages.prop('clientHeight');
+  const scrollTop = messages.prop('scrollTop');
+  const scrollHeight = messages.prop('scrollHeight');
+  const newMsgHeight = newMessage.innerHeight();
+  const lastMsgHeight = newMessage.prev().innerHeight();
+
+  if (clientHeight + scrollTop + newMsgHeight + lastMsgHeight >= scrollHeight) {
+    messages.scrollTop(scrollHeight);
+  }
+}
+
 socket.on('connect', function() {
   console.log('Connected to server');
 });
@@ -18,7 +35,7 @@ socket.on('newMessage', function(message) {
   });
 
   $('#messages').append(html);
-
+  scrollToBottom();
 
   // const li = $('<li></li>');
   // li.text(`${message.from} ${formattedTime}: ${message.text}`);
@@ -48,13 +65,14 @@ socket.on('newLocationMessage', (location) => {
   });
 
   $('#messages').append(html);
+  scrollToBottom();
+
   // const li = $('<li></li>');
   // const a = $('<a target="_blank">My current location</a>');
 
   // li.text(`${message.from} ${formattedTime}: `);
   // a.attr('href', message.url);
   // li.append(a);
-
 });
 
 const locationBtn = $('#send-location');
